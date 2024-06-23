@@ -45,16 +45,21 @@
                                             <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                                                 <ul class="divide-y divide-gray-200">
                                                     @foreach ($order->products as $product)
+                                                    @php
+                                                        $dimensions = is_string($product->dimensions) ? json_decode($product->dimensions, true) : $product->dimensions;
+                                                    @endphp
                                                         <li class="py-2 flex flex-col">
                                                             <span class="font-semibold">{{ $product->name }}</span>
                                                             <span>Quantity: {{ $product->pivot->quantity }}</span>
                                                             <span>Price: ${{ number_format($product->price, 2) }}</span>
-                                                            @if ($product->dimensions)
+                                                            @if (is_array($dimensions))
                                                                 <span>Dimensions:
-                                                                    {{ $product->dimensions['length'] }} x
-                                                                    {{ $product->dimensions['width'] }} x
-                                                                    {{ $product->dimensions['height'] }}
+                                                                    {{ $dimensions['length'] }} x
+                                                                    {{ $dimensions['width'] }} x
+                                                                    {{ $dimensions['height'] }}
                                                                 </span>
+                                                            @else
+                                                                <span>Dimensions: Not available</span>
                                                             @endif
                                                             <span>Description: {{ $product->description }}</span>
                                                             <span>SKU: {{ $product->sku }}</span>
